@@ -15,6 +15,7 @@ const wpx = (value) => {
 const colors = {
   primary: '#25B7D3',
   secondary: '#fff',
+  default: '#333333',
   btnText: '#4B4B4B',
   btnBg: '#25B7D3',
   background: '#E5DDD5',

@@ -6,7 +6,7 @@ import {Container} from './styles';
 export default function Loading() {
   return (
     <Container>
-      <ActivityIndicator size="small" />
+      <ActivityIndicator size="large" color="#fff" />
     </Container>
   );
 }

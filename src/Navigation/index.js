@@ -11,7 +11,7 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Chat"
         screenOptions={{
           headerStyle: {
             backgroundColor: theme.colors.primary,
@@ -21,7 +21,11 @@ export default function Navigation() {
             fontWeight: 'bold',
           },
         }}>
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{headerShown: false}}
+        />
         <Stack.Screen name="Chat" component={Chat} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,1 +1,1 @@
-export const SERVER_URL = 'https://devquiz-backend.herokuapp.com/';
+export const SERVER_URL = 'https://dta-simplechat-backend.herokuapp.com/';
