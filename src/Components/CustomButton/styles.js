@@ -13,5 +13,4 @@ export const Text = styled.Text`
   width: 100%;
   font-size: ${(props) => props.theme.fonts.medium};
   color: ${(props) => props.theme.colors.secondary};
-  font-family: 'Ubuntu-Bold';
 `;

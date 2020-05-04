@@ -6,6 +6,7 @@ import {ThemeProvider} from 'styled-components';
 import AuthProvider from './AuthContext';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Loading from '~/Components/Loading';
+import ChatProvider from './ChatContext';
 
 export const AppContext = createContext();
 
@@ -32,7 +33,9 @@ export default function AppProvider({children}) {
       <ThemeProvider theme={styles}>
         <SafeAreaProvider>
           {loading && <Loading />}
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <ChatProvider>{children}</ChatProvider>
+          </AuthProvider>
         </SafeAreaProvider>
       </ThemeProvider>
     </AppContext.Provider>
