@@ -11,7 +11,7 @@ const ChatProvider = ({children}) => {
     setTyping(user);
     typingTimer = setTimeout(() => {
       setTyping({});
-    }, 5000);
+    }, 1000);
   };
 
   return (

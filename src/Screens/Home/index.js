@@ -12,6 +12,7 @@ import Snackbar from 'react-native-snackbar';
 import {saveUser} from '~/Storage/UserStorage';
 import {useApp} from '~/Contexts/AppContext';
 import {useAuth} from '~/Contexts/AuthContext';
+import {getData} from '~/Service/AuthApi';
 export default function Home({navigation}) {
   const [username, setUsername] = useState('');
   const {setLoading} = useApp();
@@ -22,9 +23,10 @@ export default function Home({navigation}) {
     if (username) {
       try {
         //let pushToken = await getPushToken();
-        //const dataReturn = await getData(username, pushToken);
-        await saveUser({username: username});
-        setUser({userId: 1, username: username});
+        const dataReturn = await getData(username);
+        await saveUser(dataReturn.data);
+        console.log('user_return', dataReturn.data);
+        setUser(dataReturn.data);
         navigation.navigate('Chat');
       } catch (error) {
         console.log(error);

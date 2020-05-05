@@ -9,8 +9,8 @@ const Message = ({data}) => {
   const {user} = useAuth();
 
   return (
-    <Container owner={user.userId == data?.user?.id}>
-      {user.userId != data?.user?.id && (
+    <Container owner={user.id == data?.user?.id}>
+      {user.id != data?.user?.id && (
         <SenderInfo>{data?.user.username}</SenderInfo>
       )}
       <ContainerMessage>

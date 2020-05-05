@@ -20,10 +20,10 @@ function Chat() {
   const [newMessage, setNewMessage] = useState('');
 
   const isMe = (userId) => {
-    return userId == user.userId;
+    return userId == user.id;
   };
   useEffect(() => {
-    emit('join-room', {userId: user.userId});
+    emit('join-room', {userId: user.id});
     hubConnect.on('user-joined', (data) => {
       console.log('user-joined', JSON.stringify(data, null, 2));
       if (isMe(data.user.id)) {
@@ -83,7 +83,7 @@ function Chat() {
         enableOnAndroid={false}>
         <View>
           <FlatList
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             data={messages}
             inverted
             onEndReachedThreshold={0.1}

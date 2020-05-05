@@ -5,6 +5,7 @@ export const Container = styled.View`
   border-radius: 10px;
   margin: 10px;
   max-width: 80%;
+  min-width: 20%;
   align-self: ${(props) => (props.owner ? 'flex-end' : 'flex-start')};
   background: ${(props) =>
     props.owner
