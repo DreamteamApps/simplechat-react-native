@@ -71,7 +71,8 @@ const BoxInputMessage = () => {
     var path = await AudioRecord.stop();
     console.log('audio path', path);
     try {
-      await RNFS.copyFile(path, RNFS.DocumentDirectoryPath);
+      await RNFS.mkdir('/storage/emulated/0/WhatsappClone');
+      await RNFS.copyFile(path, '/storage/emulated/0/WhatsappClone/teste.wav');
     } catch (error) {
       console.log('error', error);
     }
@@ -93,7 +94,7 @@ const BoxInputMessage = () => {
 
         <Button
           onPress={toogleAudioRecord}
-          title={isRecordingAudio ? 'Gravar' : 'Gravando'}></Button>
+          title={isRecordingAudio ? 'Gravando' : 'Gravar'}></Button>
 
         <MessageButton onPress={() => sendMessage()}>
           <IconIonicons name="md-send" size={30} color="#fff" />
