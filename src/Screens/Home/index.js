@@ -24,7 +24,7 @@ export default function Home({navigation}) {
         //let pushToken = await getPushToken();
         //const dataReturn = await getData(username, pushToken);
         await saveUser({username: username});
-        setUser({username: username});
+        setUser({userId: 1, username: username});
         navigation.navigate('Chat');
       } catch (error) {
         console.log(error);

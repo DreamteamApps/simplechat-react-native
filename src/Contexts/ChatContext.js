@@ -1,11 +1,22 @@
-import React, {createContext, useState, useContext, useEffect} from 'react';
+import React, {createContext, useState, useContext, useRef} from 'react';
 export const ChatContext = createContext();
 
 const ChatProvider = ({children}) => {
   const [message, setMessage] = useState('');
+  const [typing, setTyping] = useState({});
+  var typingTimer;
+
+  const startTyping = (user) => {
+    typingTimer && clearTimeout(typingTimer);
+    setTyping(user);
+    typingTimer = setTimeout(() => {
+      setTyping({});
+    }, 5000);
+  };
 
   return (
-    <ChatContext.Provider value={{message, setMessage}}>
+    <ChatContext.Provider
+      value={{message, setMessage, typing, setTyping, startTyping}}>
       {children}
     </ChatContext.Provider>
   );

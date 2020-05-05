@@ -3,7 +3,7 @@ import {getUser} from '~/Storage/UserStorage';
 export const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
-  const [user, setUser] = useState({username: 'default'});
+  const [user, setUser] = useState({userId: 1, username: 'default'});
 
   // useEffect(() => {
   //   getLocalUserData();

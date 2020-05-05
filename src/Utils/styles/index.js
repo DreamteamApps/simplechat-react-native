@@ -15,6 +15,8 @@ const wpx = (value) => {
 const colors = {
   primary: '#25B7D3',
   secondary: '#fff',
+  bgOwnerMessage: '#DCF8C6',
+  bgSenderMessage: '#FFFFFF',
   default: '#333333',
   btnText: '#4B4B4B',
   btnBg: '#25B7D3',
@@ -25,6 +27,7 @@ const colors = {
   themeType: 'light-content',
 };
 const fonts = {
+  xxxsmall: hpx(10),
   xxsmall: hpx(12),
   xsmall: hpx(14),
   small: hpx(16),

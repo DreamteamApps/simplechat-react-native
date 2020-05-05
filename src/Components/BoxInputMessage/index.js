@@ -1,35 +1,56 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {View} from 'react-native';
-import {Container, MessageButton, InputContainer} from './styles';
+import {
+  Container,
+  ContainerComponents,
+  MessageButton,
+  InputContainer,
+  Typing,
+} from './styles';
 import InputText from '../InputText';
 import {useChat} from '~/Contexts/ChatContext';
 import {useApp} from '~/Contexts/AppContext';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
+import {debounce} from 'throttle-debounce';
 
 const BoxInputMessage = () => {
-  const {message, setMessage} = useChat();
+  const {message, setMessage, typing} = useChat();
   const {emit} = useApp();
+  const sendMessage = () => {
+    emit('send-message', {
+      message: message,
+      type: 'text',
+    });
+    setMessage('');
+  };
+
+  const delayedTyping = useRef(
+    debounce(500, () => {
+      emit('writing-message');
+    }),
+  ).current;
+  const onStartTyping = (text) => {
+    setMessage(text);
+    delayedTyping(text);
+  };
   return (
     <Container>
-      <InputContainer>
-        <InputText
-          onChangeText={(text) => setMessage(text)}
-          value={message}
-          autoCapitalize="none"
-          onSubmitEditing={() => {
-            emit('send-message', {
-              message: message,
-              type: 'text',
-            });
-            setMessage('');
-          }}
-          placeholder="Type your message"
-        />
-      </InputContainer>
+      {typing?.username && <Typing>{typing?.username} is typing...</Typing>}
+      <ContainerComponents>
+        <InputContainer>
+          <InputText
+            onChangeText={(text) => onStartTyping(text)}
+            value={message}
+            autoCapitalize="none"
+            onSubmitEditing={() => sendMessage()}
+            placeholder="Type your message"
+          />
+        </InputContainer>
 
-      <MessageButton>
-        <IconIonicons name="md-send" size={30} color="#fff" />
-      </MessageButton>
+        <MessageButton onPress={() => sendMessage()}>
+          <IconIonicons name="md-send" size={30} color="#fff" />
+        </MessageButton>
+      </ContainerComponents>
     </Container>
   );
 };

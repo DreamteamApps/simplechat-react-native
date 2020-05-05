@@ -8,5 +8,5 @@ export const Input = styled.TextInput`
   font-size: ${(props) => props.theme.fonts.medium};
   padding: ${(props) => props.theme.hpx(10)};
   width: 100%;
-  text-align: center;
+  text-align: left;
 `;
