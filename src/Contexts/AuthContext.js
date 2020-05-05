@@ -15,9 +15,12 @@ const AuthProvider = ({children}) => {
   //     setUser(user);
   //   }
   // };
+  const isMe = (userId) => {
+    return userId == user.id;
+  };
 
   return (
-    <AuthContext.Provider value={{user, setUser}}>
+    <AuthContext.Provider value={{user, setUser, isMe}}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useCallback, memo} from 'react';
 
 import {Container} from './styles';
-import {Text, Button, FlatList, View, Dimensions} from 'react-native';
+import {Text, Button, FlatList, View, Dimensions, Platform} from 'react-native';
 import {useAuth} from '~/Contexts/AuthContext';
 import {useApp} from '~/Contexts/AppContext';
 import Message from '~/Components/Message';
@@ -13,42 +13,42 @@ import UserActivityMessage from '~/Components/UserActivityMessage';
 import {useChat} from '~/Contexts/ChatContext';
 
 function Chat() {
-  const {user} = useAuth();
+  const {user, isMe} = useAuth();
   const {emit, hubConnect} = useApp();
   const {startTyping} = useChat();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
-  const isMe = (userId) => {
-    return userId == user.id;
+  const setUserActivity = (userData, action) => {
+    setMessages((messages) => [
+      {
+        type: 'userActivity',
+        user: userData,
+        action: action,
+      },
+      ...messages,
+    ]);
   };
+
   useEffect(() => {
+    console.log('myUser', user);
     emit('join-room', {userId: user.id});
+
     hubConnect.on('user-joined', (data) => {
-      console.log('user-joined', JSON.stringify(data, null, 2));
+      //console.log('user-joined', JSON.stringify(data, null, 2));
+      console.log('user-joined', data);
       if (isMe(data.user.id)) {
+        console.log('entrei agora com mensagens', Platform.OS);
         setMessages(data.lastMessages);
       } else {
-        setMessages((messages) => [
-          {
-            type: 'userActivity',
-            user: data.user,
-            action: 'joined',
-          },
-          ...messages,
-        ]);
+        console.log('entrei agora sem mensagens', Platform.OS);
+
+        setUserActivity(data.user, 'joined');
       }
     });
 
     hubConnect.on('user-leaved', (data) => {
-      setMessages((messages) => [
-        {
-          type: 'userActivity',
-          user: data.user,
-          action: 'left',
-        },
-        ...messages,
-      ]);
+      setUserActivity(data.user, 'left');
     });
 
     hubConnect.on('user-send-message', (message) => {
@@ -58,7 +58,7 @@ function Chat() {
 
     hubConnect.on('user-writing-message', (data) => {
       console.log('user-writing-message', data);
-      startTyping(data);
+      startTyping(data.user);
     });
 
     return () => {
@@ -85,15 +85,22 @@ function Chat() {
         <View>
           <FlatList
             showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
             data={messages}
             inverted
+            keyExtractor={(item) => Math.random().toString()}
             onEndReachedThreshold={0.1}
             //onEndReached={this.handleLoadMore}
             renderItem={({item}) => {
               if (item.type == 'userActivity') {
-                return <UserActivityMessage key={item.id} data={item} />;
+                return (
+                  <UserActivityMessage
+                    key={Math.random().toString()}
+                    data={item}
+                  />
+                );
               }
-              return <Message key={item.id} data={item} />;
+              return <Message key={Math.random().toString()} data={item} />;
             }}
             contentContainerStyle={{paddingBottom: 3}}
           />

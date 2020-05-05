@@ -12,9 +12,12 @@ import {useChat} from '~/Contexts/ChatContext';
 import {useApp} from '~/Contexts/AppContext';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 import {debounce} from 'throttle-debounce';
+import {useAuth} from '~/Contexts/AuthContext';
 
 const BoxInputMessage = () => {
   const {message, setMessage, typing} = useChat();
+  const {isMe} = useAuth();
+
   const {emit} = useApp();
   const sendMessage = () => {
     emit('send-message', {
@@ -35,7 +38,9 @@ const BoxInputMessage = () => {
   };
   return (
     <Container>
-      {typing?.username && <Typing>{typing?.username} is typing...</Typing>}
+      {typing?.username && !isMe(typing?.id) && (
+        <Typing>{typing?.username} is typing...</Typing>
+      )}
       <ContainerComponents>
         <InputContainer>
           <InputText

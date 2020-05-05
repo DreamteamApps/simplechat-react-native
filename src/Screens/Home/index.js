@@ -9,7 +9,7 @@ import {
 import CustomButton from '../../Components/CustomButton';
 import InputText from '~/Components/InputText';
 import Snackbar from 'react-native-snackbar';
-import {saveUser} from '~/Storage/UserStorage';
+import {saveUser, getUser} from '~/Storage/UserStorage';
 import {useApp} from '~/Contexts/AppContext';
 import {useAuth} from '~/Contexts/AuthContext';
 import {getData} from '~/Service/AuthApi';
@@ -17,6 +17,21 @@ export default function Home({navigation}) {
   const [username, setUsername] = useState('');
   const {setLoading} = useApp();
   const {setUser} = useAuth();
+
+  const getLocalUserData = async () => {
+    const user = await getUser();
+
+    if (user?.id) {
+      setUser(user);
+      navigation.navigate('Chat');
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    //check if we have this Local User
+    setLoading(true);
+    getLocalUserData();
+  }, []);
 
   const getUserData = async (username) => {
     setLoading(true);
