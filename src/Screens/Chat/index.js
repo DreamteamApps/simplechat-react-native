@@ -65,6 +65,7 @@ function Chat() {
       hubConnect.off('user-joined');
       hubConnect.off('user-send-message');
       hubConnect.off('user-leaved');
+      hubConnect.off('user-send-message');
     };
   }, []);
 
