@@ -1,7 +1,7 @@
 import AudioRecord from 'react-native-audio-record';
 import {PERMISSIONS, request} from 'react-native-permissions';
+import {uploadSound} from './fileApi';
 import RNFS from 'react-native-fs';
-
 const options = {
   sampleRate: 16000, // default 44100
   channels: 1, // 1 or 2, default 1
@@ -9,6 +9,9 @@ const options = {
   audioSource: 6, // android only (see below)
   wavFile: 'voiceRecorded.wav', // default 'audio.wav'
 };
+
+let durationInterval = null;
+let duration = 0;
 
 async function init() {
   console.log('init audio');
@@ -21,16 +24,28 @@ async function init() {
   }
 }
 
-function start() {
+function start(durationCallback) {
+  duration = 0;
+  durationInterval = setInterval(() => {
+    duration++;
+    console.log(duration);
+    if (durationCallback) durationCallback(duration);
+  }, 1000);
   AudioRecord.start();
 }
 
 async function stop() {
   var path = await AudioRecord.stop();
+  clearInterval(durationInterval);
+  duration = 0;
   try {
     await RNFS.mkdir('/storage/emulated/0/WhatsappClone');
     await RNFS.copyFile(path, '/storage/emulated/0/WhatsappClone/teste2.wav');
-    RNFS.readFile("",)
+    console.log(
+      'RNFS.exists',
+      await RNFS.exists('/storage/emulated/0/WhatsappClone/teste2.wav'),
+    );
+    await uploadSound(path, duration);
   } catch (error) {
     console.log('error', error);
   }

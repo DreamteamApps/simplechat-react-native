@@ -17,6 +17,7 @@ import AudioRecord from '~/Service/audioRecorder';
 const BoxInputMessage = () => {
   const {message, setMessage, typing} = useChat();
   const [isRecordingAudio, setIsRecordingAudio] = useState(false);
+  const [recordingDuration, setRecordingDuration] = useState(0);
   const {emit} = useApp();
   const sendMessage = () => {
     emit('send-message', {
@@ -40,9 +41,9 @@ const BoxInputMessage = () => {
     delayedTyping(text);
   };
 
-  const toogleAudioRecord = useCallback(async () => {
+  const toogleAudioRecord = useCallback(() => {
     if (isRecordingAudio) AudioRecord.stop();
-    else AudioRecord.start();
+    else AudioRecord.start((duration) => setRecordingDuration(duration));
     setIsRecordingAudio(!isRecordingAudio);
   }, [isRecordingAudio]);
 
@@ -61,9 +62,11 @@ const BoxInputMessage = () => {
       );
     else {
       return (
-        <MessageButton onPress={() => toogleAudioRecord()}>
-          <IconIonicons name="md-mic" size={30} color="#FFF" />
-        </MessageButton>
+        <>
+          <MessageButton onPress={() => toogleAudioRecord()}>
+            <IconIonicons name="md-mic" size={30} color="#FFF" />
+          </MessageButton>
+        </>
       );
     }
   }, [message, isRecordingAudio]);
@@ -74,12 +77,12 @@ const BoxInputMessage = () => {
       <ContainerComponents>
         <InputContainer>
           <InputText
-            editable={!isRecordingAudio}
+            // editable={!isRecordingAudio}
             onChangeText={(text) => onStartTyping(text)}
-            value={message}
+            value={'Gravando: ' + recordingDuration}
             autoCapitalize="none"
             onSubmitEditing={() => sendMessage()}
-            placeholder="Type your message"
+            // placeholder="Type your message"
           />
         </InputContainer>
         {actionButton()}
