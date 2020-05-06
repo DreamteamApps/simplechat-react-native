@@ -24,7 +24,7 @@ export const MessageButton = styled.TouchableOpacity`
   width: ${(props) => props.theme.hpx(50)};
   height: ${(props) => props.theme.hpx(50)};
   border-radius: ${(props) => props.theme.hpx(25)};
-  background: ${(props) => props.theme.colors.primary};
+  background: ${(props) => props.color ?? props.theme.colors.primary};
   align-items: center;
   justify-content: center;
 `;

@@ -12,17 +12,7 @@ import {useChat} from '~/Contexts/ChatContext';
 import {useApp} from '~/Contexts/AppContext';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 import {debounce} from 'throttle-debounce';
-import AudioRecord from 'react-native-audio-record';
-import {PERMISSIONS, request} from 'react-native-permissions';
-import RNFS from 'react-native-fs';
-
-const options = {
-  sampleRate: 16000, // default 44100
-  channels: 1, // 1 or 2, default 1
-  bitsPerSample: 16, // 8 or 16, default 16
-  audioSource: 6, // android only (see below)
-  wavFile: 'voiceRecorded.wav', // default 'audio.wav'
-};
+import AudioRecord from '~/Service/audioRecorder';
 
 const BoxInputMessage = () => {
   const {message, setMessage, typing} = useChat();
@@ -36,19 +26,8 @@ const BoxInputMessage = () => {
     setMessage('');
   };
 
-  async function requestAudio() {
-    if (
-      (await request(PERMISSIONS.ANDROID.RECORD_AUDIO)) === 'granted' &&
-      (await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE)) ===
-        'granted' &&
-      (await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)) === 'granted'
-    ) {
-      AudioRecord.init(options);
-    }
-  }
-
   useEffect(() => {
-    requestAudio();
+    AudioRecord.init();
   }, []);
 
   const delayedTyping = useRef(
@@ -62,21 +41,32 @@ const BoxInputMessage = () => {
   };
 
   const toogleAudioRecord = useCallback(async () => {
-    if (isRecordingAudio) getAudio();
+    if (isRecordingAudio) AudioRecord.stop();
     else AudioRecord.start();
     setIsRecordingAudio(!isRecordingAudio);
   }, [isRecordingAudio]);
 
-  const getAudio = async () => {
-    var path = await AudioRecord.stop();
-    console.log('audio path', path);
-    try {
-      await RNFS.mkdir('/storage/emulated/0/WhatsappClone');
-      await RNFS.copyFile(path, '/storage/emulated/0/WhatsappClone/teste.wav');
-    } catch (error) {
-      console.log('error', error);
+  const actionButton = useCallback(() => {
+    if (message?.length > 0) {
+      return (
+        <MessageButton onPress={() => sendMessage()}>
+          <IconIonicons name="md-send" size={30} color="#fff" />
+        </MessageButton>
+      );
+    } else if (isRecordingAudio)
+      return (
+        <MessageButton color="transparent" onPress={() => toogleAudioRecord()}>
+          <IconIonicons name="md-mic" size={50} color="#F00" />
+        </MessageButton>
+      );
+    else {
+      return (
+        <MessageButton onPress={() => toogleAudioRecord()}>
+          <IconIonicons name="md-mic" size={30} color="#FFF" />
+        </MessageButton>
+      );
     }
-  };
+  }, [message, isRecordingAudio]);
 
   return (
     <Container>
@@ -84,6 +74,7 @@ const BoxInputMessage = () => {
       <ContainerComponents>
         <InputContainer>
           <InputText
+            editable={!isRecordingAudio}
             onChangeText={(text) => onStartTyping(text)}
             value={message}
             autoCapitalize="none"
@@ -91,14 +82,7 @@ const BoxInputMessage = () => {
             placeholder="Type your message"
           />
         </InputContainer>
-
-        <Button
-          onPress={toogleAudioRecord}
-          title={isRecordingAudio ? 'Gravando' : 'Gravar'}></Button>
-
-        <MessageButton onPress={() => sendMessage()}>
-          <IconIonicons name="md-send" size={30} color="#fff" />
-        </MessageButton>
+        {actionButton()}
       </ContainerComponents>
     </Container>
   );
