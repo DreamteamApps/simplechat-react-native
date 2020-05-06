@@ -1,7 +1,7 @@
 /**
  * @format
  */
-//require('react-native').unstable_enableLogBox();
+require('react-native').unstable_enableLogBox();
 
 import 'react-native-gesture-handler';
 import {AppRegistry, YellowBox} from 'react-native';
