@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {View} from 'react-native';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
+import {View, Button} from 'react-native';
 import {
   Container,
   ContainerComponents,
@@ -13,11 +13,12 @@ import {useApp} from '~/Contexts/AppContext';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 import {debounce} from 'throttle-debounce';
 import {useAuth} from '~/Contexts/AuthContext';
+import AudioRecord from '~/Service/audioRecorder';
 
 const BoxInputMessage = () => {
   const {message, setMessage, typing} = useChat();
   const {isMe} = useAuth();
-
+  const [isRecordingAudio, setIsRecordingAudio] = useState(false);
   const {emit} = useApp();
   const sendMessage = () => {
     emit('send-message', {
@@ -26,6 +27,10 @@ const BoxInputMessage = () => {
     });
     setMessage('');
   };
+
+  useEffect(() => {
+    AudioRecord.init();
+  }, []);
 
   const delayedTyping = useRef(
     debounce(500, () => {
@@ -36,6 +41,35 @@ const BoxInputMessage = () => {
     setMessage(text);
     delayedTyping(text);
   };
+
+  const toogleAudioRecord = useCallback(async () => {
+    if (isRecordingAudio) AudioRecord.stop();
+    else AudioRecord.start();
+    setIsRecordingAudio(!isRecordingAudio);
+  }, [isRecordingAudio]);
+
+  const actionButton = useCallback(() => {
+    if (message?.length > 0) {
+      return (
+        <MessageButton onPress={() => sendMessage()}>
+          <IconIonicons name="md-send" size={30} color="#fff" />
+        </MessageButton>
+      );
+    } else if (isRecordingAudio)
+      return (
+        <MessageButton color="transparent" onPress={() => toogleAudioRecord()}>
+          <IconIonicons name="md-mic" size={50} color="#F00" />
+        </MessageButton>
+      );
+    else {
+      return (
+        <MessageButton onPress={() => toogleAudioRecord()}>
+          <IconIonicons name="md-mic" size={30} color="#FFF" />
+        </MessageButton>
+      );
+    }
+  }, [message, isRecordingAudio]);
+
   return (
     <Container>
       {typing?.username && !isMe(typing?.id) && (
@@ -44,6 +78,7 @@ const BoxInputMessage = () => {
       <ContainerComponents>
         <InputContainer>
           <InputText
+            editable={!isRecordingAudio}
             onChangeText={(text) => onStartTyping(text)}
             value={message}
             autoCapitalize="none"
@@ -51,10 +86,7 @@ const BoxInputMessage = () => {
             placeholder="Type your message"
           />
         </InputContainer>
-
-        <MessageButton onPress={() => sendMessage()}>
-          <IconIonicons name="md-send" size={30} color="#fff" />
-        </MessageButton>
+        {actionButton()}
       </ContainerComponents>
     </Container>
   );
