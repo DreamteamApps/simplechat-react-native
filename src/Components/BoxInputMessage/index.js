@@ -57,8 +57,8 @@ const BoxInputMessage = () => {
       );
     } else if (isRecordingAudio)
       return (
-        <MessageButton color="transparent" onPress={() => toogleAudioRecord()}>
-          <IconIonicons name="md-mic" size={50} color="#F00" />
+        <MessageButton color="#FF5252" onPress={() => toogleAudioRecord()}>
+          <IconIonicons name="md-mic" size={30} color="#fff" />
         </MessageButton>
       );
     else {

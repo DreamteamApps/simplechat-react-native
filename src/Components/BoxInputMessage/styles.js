@@ -20,7 +20,9 @@ export const Typing = styled.Text`
   color: ${(props) => props.theme.colors.gray};
   font-size: ${(props) => props.theme.fonts.xxxsmall};
 `;
-export const MessageButton = styled.TouchableOpacity`
+export const MessageButton = styled.TouchableOpacity.attrs((props) => ({
+  activeOpacity: 0.7,
+}))`
   width: ${(props) => props.theme.hpx(50)};
   height: ${(props) => props.theme.hpx(50)};
   border-radius: ${(props) => props.theme.hpx(25)};
