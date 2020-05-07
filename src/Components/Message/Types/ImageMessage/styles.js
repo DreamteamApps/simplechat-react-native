@@ -4,10 +4,12 @@ import {createImageProgress} from 'react-native-image-progress';
 
 const ImageItem = createImageProgress(FastImage);
 
-export const Container = styled.View``;
-export const Text = styled.Text``;
-export const Image = styled(ImageItem)`
+export const Container = styled.View`
   width: ${(props) => props.theme.wpx(200)};
   height: ${(props) => props.theme.hpx(200)};
-  resize-mode: cover;
+`;
+export const Text = styled.Text``;
+export const Image = styled(ImageItem)`
+  width: 100%;
+  height: 100%;
 `;
