@@ -5,6 +5,7 @@ import AudioMessage from './Types/AudioMessage';
 import moment from 'moment';
 import {Container, SenderInfo, DateInfo, ContainerMessage} from './styles';
 import {useAuth} from '~/Contexts/AuthContext';
+import ImageMessage from './Types/ImageMessage';
 const Message = ({data}) => {
   const {user} = useAuth();
 
@@ -16,6 +17,7 @@ const Message = ({data}) => {
       <ContainerMessage>
         {data.type === 'text' && <TextMessage>{data.message}</TextMessage>}
         {data.type === 'audio' && <AudioMessage>{data.message}</AudioMessage>}
+        {data.type === 'image' && <ImageMessage imageUrl={data?.file?.url} />}
       </ContainerMessage>
       <DateInfo>{moment(data?.date).format('HH:mm')}</DateInfo>
     </Container>

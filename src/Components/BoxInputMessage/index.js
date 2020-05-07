@@ -12,10 +12,12 @@ import {useChat} from '~/Contexts/ChatContext';
 import {useApp} from '~/Contexts/AppContext';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 import {debounce} from 'throttle-debounce';
+import {useAuth} from '~/Contexts/AuthContext';
 import AudioRecord from '~/Service/audioRecorder';
 
 const BoxInputMessage = () => {
   const {message, setMessage, typing} = useChat();
+  const {isMe} = useAuth();
   const [isRecordingAudio, setIsRecordingAudio] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const {emit} = useApp();
@@ -56,8 +58,8 @@ const BoxInputMessage = () => {
       );
     } else if (isRecordingAudio)
       return (
-        <MessageButton color="transparent" onPress={() => toogleAudioRecord()}>
-          <IconIonicons name="md-mic" size={50} color="#F00" />
+        <MessageButton color="#FF5252" onPress={() => toogleAudioRecord()}>
+          <IconIonicons name="md-mic" size={30} color="#fff" />
         </MessageButton>
       );
     else {
@@ -73,7 +75,9 @@ const BoxInputMessage = () => {
 
   return (
     <Container>
-      {typing?.username && <Typing>{typing?.username} is typing...</Typing>}
+      {typing?.username && !isMe(typing?.id) && (
+        <Typing>{typing?.username} is typing...</Typing>
+      )}
       <ContainerComponents>
         <InputContainer>
           <InputText
