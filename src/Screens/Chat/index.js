@@ -62,6 +62,8 @@ function Chat() {
     });
 
     return () => {
+      emit('leave-room');
+
       hubConnect.off('user-joined');
       hubConnect.off('user-send-message');
       hubConnect.off('user-leaved');

@@ -67,6 +67,15 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - libwebp (1.1.0):
+    - libwebp/demux (= 1.1.0)
+    - libwebp/mux (= 1.1.0)
+    - libwebp/webp (= 1.1.0)
+  - libwebp/demux (1.1.0):
+    - libwebp/webp
+  - libwebp/mux (1.1.0):
+    - libwebp/demux
+  - libwebp/webp (1.1.0)
   - lottie-ios (3.1.8)
   - lottie-react-native (3.3.2):
     - lottie-ios (~> 3.1.3)
@@ -310,6 +319,10 @@ PODS:
     - React
   - RNCMaskedView (0.1.10):
     - React
+  - RNFastImage (8.1.5):
+    - React
+    - SDWebImage (~> 5.0)
+    - SDWebImageWebPCoder (~> 0.4.1)
   - RNFS (2.16.6):
     - React
   - RNGestureHandler (1.6.1):
@@ -324,6 +337,12 @@ PODS:
     - React
   - RNVectorIcons (6.6.0):
     - React
+  - SDWebImage (5.7.3):
+    - SDWebImage/Core (= 5.7.3)
+  - SDWebImage/Core (5.7.3)
+  - SDWebImageWebPCoder (0.4.1):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.5)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -383,6 +402,7 @@ DEPENDENCIES:
   - RNAudioRecord (from `../node_modules/react-native-audio-record`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
@@ -404,8 +424,11 @@ SPEC REPOS:
     - Flipper-PeerTalk
     - Flipper-RSocket
     - FlipperKit
+    - libwebp
     - lottie-ios
     - OpenSSL-Universal
+    - SDWebImage
+    - SDWebImageWebPCoder
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -473,6 +496,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNFastImage:
+    :path: "../node_modules/react-native-fast-image"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
@@ -506,6 +531,7 @@ SPEC CHECKSUMS:
   FlipperKit: 6dc9b8f4ef60d9e5ded7f0264db299c91f18832e
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   lottie-react-native: 2a1a82bb326ae51331a5520de0cf706733c6db69
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
@@ -535,6 +561,7 @@ SPEC CHECKSUMS:
   RNAudioRecord: 162fee3b8fb628773ec704bf0333823125be2ed7
   RNCAsyncStorage: 453cd7c335ec9ba3b877e27d02238956b76f3268
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
+  RNFastImage: 35ae972d6727c84ee3f5c6897e07f84d0a3445e9
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNPermissions: 3635b407c15f2fe591bd2101c8f20aa0912caba8
@@ -542,6 +569,8 @@ SPEC CHECKSUMS:
   RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
   RNSnackbar: 160077964866262ed08cfd33ab4760219ea2aef6
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
+  SDWebImage: 97351f6582ceca541ea294ba66a1fcb342a331c2
+  SDWebImageWebPCoder: 36f8f47bd9879a8aea6044765c1351120fd8e3a8
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
