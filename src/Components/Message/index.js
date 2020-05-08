@@ -17,7 +17,12 @@ const Message = ({data}) => {
       <ContainerMessage>
         {data.type === 'text' && <TextMessage>{data.message}</TextMessage>}
         {data.type === 'audio' && <AudioMessage>{data.message}</AudioMessage>}
-        {data.type === 'image' && <ImageMessage imageUrl={data?.file?.url} />}
+        {data.type === 'image' && (
+          <ImageMessage
+            imageUrl={data?.file?.url}
+            thumbUrl={data?.file?.thumbnailUrl}
+          />
+        )}
       </ContainerMessage>
       <DateInfo>{moment(data?.date).format('HH:mm')}</DateInfo>
     </Container>
