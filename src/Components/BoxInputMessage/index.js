@@ -3,7 +3,8 @@ import {View, Button} from 'react-native';
 import {
   Container,
   ContainerComponents,
-  MessageButton,
+  CancelContainer,
+  CancelText,
   InputContainer,
   Typing,
   InputBox,
@@ -48,10 +49,16 @@ const BoxInputMessage = () => {
   };
 
   const toogleAudioRecord = useCallback(async () => {
-    if (isRecordingAudio) AudioRecord.stop((duration) => setRecordingDuration(duration));
+    if (isRecordingAudio)
+      AudioRecord.stop((duration) => setRecordingDuration(duration));
     else await AudioRecord.start((duration) => setRecordingDuration(duration));
     setIsRecordingAudio(!isRecordingAudio);
   }, [isRecordingAudio]);
+
+  const cancelAudioRecord = useCallback(async () => {
+    AudioRecord.cancel((duration) => setRecordingDuration(duration));
+    setIsRecordingAudio(false);
+  }, []);
 
   const getFormatedDuration = useCallback((recordingDuration) => {
     const minutes = Math.floor(recordingDuration / 60);
@@ -79,6 +86,9 @@ const BoxInputMessage = () => {
                   />
                 </InternalButton>
                 <TimeText>{getFormatedDuration(recordingDuration)}</TimeText>
+                <CancelContainer onPress={cancelAudioRecord}>
+                  <CancelText>Cancelar</CancelText>
+                </CancelContainer>
               </>
             ) : (
               <>

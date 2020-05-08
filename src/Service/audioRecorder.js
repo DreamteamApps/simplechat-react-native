@@ -47,11 +47,11 @@ async function start(durationCallback) {
   AudioRecord.start();
 }
 
-async function stop(durationCallback) {
+async function stop(callback) {
   var path = await AudioRecord.stop();
   clearInterval(durationInterval);
   duration = 0;
-  durationCallback(duration);
+  callback(duration);
   try {
     await uploadSound(path, duration);
   } catch (error) {
@@ -59,7 +59,16 @@ async function stop(durationCallback) {
   }
 }
 
+async function cancel(callback) {
+  await AudioRecord.stop();
+  clearInterval(durationInterval);
+  duration = 0;
+  callback(duration);
+  
+}
+
 export default {
   stop,
   start,
+  cancel,
 };

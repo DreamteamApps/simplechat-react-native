@@ -73,5 +73,18 @@ export const TimeText = styled.Text`
   text-align: left;
   flex-shrink: 1;
   align-items: center;
-  flex:1;
+  flex: 1;
+`;
+
+export const CancelContainer = styled.TouchableOpacity.attrs((props) => ({
+  activeOpacity: 0.7,
+}))`
+  flex-shrink: 1;
+  margin-right: ${(props) => props.theme.wpx(15)};
+`;
+
+export const CancelText = styled.Text`
+  color: ${(props) => props.theme.colors.default};
+  font-size: ${(props) => props.theme.fonts.medium};
+  text-align: right;
 `;
