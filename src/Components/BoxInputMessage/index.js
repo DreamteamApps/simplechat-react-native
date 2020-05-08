@@ -37,8 +37,6 @@ const BoxInputMessage = () => {
     setMessage('');
   };
 
- 
-
   const delayedTyping = useRef(
     debounce(500, () => {
       emit('writing-message');
@@ -49,9 +47,9 @@ const BoxInputMessage = () => {
     delayedTyping(text);
   };
 
-  const toogleAudioRecord = useCallback(() => {
-    if (isRecordingAudio) AudioRecord.stop();
-    else AudioRecord.start((duration) => setRecordingDuration(duration));
+  const toogleAudioRecord = useCallback(async () => {
+    if (isRecordingAudio) AudioRecord.stop((duration) => setRecordingDuration(duration));
+    else await AudioRecord.start((duration) => setRecordingDuration(duration));
     setIsRecordingAudio(!isRecordingAudio);
   }, [isRecordingAudio]);
 

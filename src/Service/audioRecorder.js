@@ -36,8 +36,8 @@ async function init() {
   }
 }
 
-function start(durationCallback) {
-  if (!initialized) init();
+async function start(durationCallback) {
+  if (!initialized) await init();
   duration = 0;
   durationInterval = setInterval(() => {
     duration++;
@@ -47,7 +47,7 @@ function start(durationCallback) {
   AudioRecord.start();
 }
 
-async function stop() {
+async function stop(durationCallback) {
   var path = await AudioRecord.stop();
   clearInterval(durationInterval);
   duration = 0;
