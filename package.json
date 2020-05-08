@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.9.0",
+    "@react-native-community/audio-toolkit": "^2.0.3",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.2.3",
     "@react-navigation/stack": "^5.2.18",
@@ -20,7 +21,6 @@
     "moment": "^2.25.3",
     "react": "16.11.0",
     "react-native": "0.62.2",
-    "react-native-audio-record": "^0.2.2",
     "react-native-fast-image": "^8.1.5",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.6.1",

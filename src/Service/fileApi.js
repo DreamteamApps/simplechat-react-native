@@ -5,13 +5,12 @@ export async function uploadSound(filePath, duration) {
   const data = new FormData();
   const audio = {
     uri: Platform.OS === 'android' ? `file://${filePath}` : filePath,
-    type: 'audio/wav',
-    name: 'teste2.wav',
+    type: 'audio/mp4',
+    name: 'voice.mp4',
   };
   data.append('file', audio);
   data.append('duration_seconds', duration);
   data.append('type', 'audio');
-  console.log('filePath', filePath);
   try {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `${SERVER_URL}file/upload`);

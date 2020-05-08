@@ -1,21 +1,21 @@
-import AudioRecord from 'react-native-audio-record';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import {uploadSound} from './fileApi';
 import {Platform} from 'react-native';
-const options = {
-  sampleRate: 16000, // default 44100
-  channels: 1, // 1 or 2, default 1
-  bitsPerSample: 16, // 8 or 16, default 16
-  audioSource: 6, // android only (see below)
-  wavFile: 'voiceRecorded.wav', // default 'audio.wav'
-};
+import {Recorder, Player} from '@react-native-community/audio-toolkit';
 
+let recorder = new Recorder('voice.mp4', {
+  bitrate: 256000,
+  channels: 2,
+  sampleRate: 44100,
+  quality: 'max',
+});
+
+let path = null;
 let durationInterval = null;
 let duration = 0;
 let initialized = false;
 
 async function init() {
-  console.log('init audio');
   clearInterval(durationInterval);
 
   if (Platform.OS === 'android') {
@@ -25,12 +25,10 @@ async function init() {
         'granted' &&
       (await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE)) === 'granted'
     ) {
-      AudioRecord.init(options);
       initialized = true;
     }
   } else {
     if ((await request(PERMISSIONS.IOS.MICROPHONE)) === 'granted') {
-      AudioRecord.init(options);
       initialized = true;
     }
   }
@@ -44,27 +42,33 @@ async function start(durationCallback) {
     console.log(duration);
     if (durationCallback) durationCallback(duration);
   }, 1000);
-  AudioRecord.start();
+  await recorder.prepare((error, fspath) => {
+    path = fspath;
+    recorder.record();
+  });
 }
 
 async function stop(callback) {
-  var path = await AudioRecord.stop();
-  clearInterval(durationInterval);
-  duration = 0;
-  callback(duration);
-  try {
+  recorder.stop(async () => {
+    // teste de som
+    let plauer = new Player(path);
+    plauer.prepare(() => {
+      plauer.play();
+    });
+    //
+    clearInterval(durationInterval);
+    duration = 0;
+    callback(duration);
     await uploadSound(path, duration);
-  } catch (error) {
-    console.log('error', error);
-  }
+  });
 }
 
 async function cancel(callback) {
-  await AudioRecord.stop();
-  clearInterval(durationInterval);
-  duration = 0;
-  callback(duration);
-  
+  recorder.stop(() => {
+    clearInterval(durationInterval);
+    duration = 0;
+    callback(duration);
+  });
 }
 
 export default {

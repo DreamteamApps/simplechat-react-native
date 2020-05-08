@@ -78,7 +78,7 @@ const BoxInputMessage = () => {
           <InputBox>
             {isRecordingAudio ? (
               <>
-                <InternalButton onPress={() => console.log('open camera')}>
+                <InternalButton>
                   <IconIonicons
                     name="md-mic"
                     size={25}
