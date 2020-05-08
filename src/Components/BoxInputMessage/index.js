@@ -37,9 +37,7 @@ const BoxInputMessage = () => {
     setMessage('');
   };
 
-  useEffect(() => {
-    AudioRecord.init();
-  }, []);
+ 
 
   const delayedTyping = useRef(
     debounce(500, () => {

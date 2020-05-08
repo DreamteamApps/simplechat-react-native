@@ -12,11 +12,11 @@ const options = {
 
 let durationInterval = null;
 let duration = 0;
+let initialized = false;
 
 async function init() {
   console.log('init audio');
   clearInterval(durationInterval);
-
 
   if (Platform.OS === 'android') {
     if (
@@ -26,15 +26,18 @@ async function init() {
       (await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE)) === 'granted'
     ) {
       AudioRecord.init(options);
+      initialized = true;
     }
   } else {
     if ((await request(PERMISSIONS.IOS.MICROPHONE)) === 'granted') {
       AudioRecord.init(options);
+      initialized = true;
     }
   }
 }
 
 function start(durationCallback) {
+  if (!initialized) init();
   duration = 0;
   durationInterval = setInterval(() => {
     duration++;
@@ -48,6 +51,7 @@ async function stop() {
   var path = await AudioRecord.stop();
   clearInterval(durationInterval);
   duration = 0;
+  durationCallback(duration);
   try {
     await uploadSound(path, duration);
   } catch (error) {
@@ -56,7 +60,6 @@ async function stop() {
 }
 
 export default {
-  init,
   stop,
   start,
 };
