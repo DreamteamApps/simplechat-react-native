@@ -15,6 +15,8 @@ let duration = 0;
 
 async function init() {
   console.log('init audio');
+  clearInterval(durationInterval);
+
 
   if (Platform.OS === 'android') {
     if (

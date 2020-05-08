@@ -6,7 +6,12 @@ import {
   MessageButton,
   InputContainer,
   Typing,
+  InputBox,
+  MessageInput,
+  InternalButton,
+  TimeText,
 } from './styles';
+import ActionButton from './actionButton';
 import InputText from '../InputText';
 import {useChat} from '~/Contexts/ChatContext';
 import {useApp} from '~/Contexts/AppContext';
@@ -14,8 +19,11 @@ import IconIonicons from 'react-native-vector-icons/Ionicons';
 import {debounce} from 'throttle-debounce';
 import {useAuth} from '~/Contexts/AuthContext';
 import AudioRecord from '~/Service/audioRecorder';
+import {useTheme} from 'styled-components';
+import {duration} from 'moment';
 
 const BoxInputMessage = () => {
+  const theme = useTheme();
   const {message, setMessage, typing} = useChat();
   const {isMe} = useAuth();
   const [isRecordingAudio, setIsRecordingAudio] = useState(false);
@@ -49,29 +57,13 @@ const BoxInputMessage = () => {
     setIsRecordingAudio(!isRecordingAudio);
   }, [isRecordingAudio]);
 
-  const actionButton = useCallback(() => {
-    if (message?.length > 0) {
-      return (
-        <MessageButton onPress={() => sendMessage()}>
-          <IconIonicons name="md-send" size={30} color="#fff" />
-        </MessageButton>
-      );
-    } else if (isRecordingAudio)
-      return (
-        <MessageButton color="#FF5252" onPress={() => toogleAudioRecord()}>
-          <IconIonicons name="md-mic" size={30} color="#fff" />
-        </MessageButton>
-      );
-    else {
-      return (
-        <>
-          <MessageButton onPress={() => toogleAudioRecord()}>
-            <IconIonicons name="md-mic" size={30} color="#FFF" />
-          </MessageButton>
-        </>
-      );
-    }
-  }, [message, isRecordingAudio]);
+  const getFormatedDuration = useCallback((recordingDuration) => {
+    const minutes = Math.floor(recordingDuration / 60);
+    const seconds = recordingDuration - minutes * 60;
+    return `${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }, []);
 
   return (
     <Container>
@@ -80,16 +72,45 @@ const BoxInputMessage = () => {
       )}
       <ContainerComponents>
         <InputContainer>
-          <InputText
-            // editable={!isRecordingAudio}
-            onChangeText={(text) => onStartTyping(text)}
-            value={'Gravando: ' + recordingDuration}
-            autoCapitalize="none"
-            onSubmitEditing={() => sendMessage()}
-            // placeholder="Type your message"
-          />
+          <InputBox>
+            {isRecordingAudio ? (
+              <>
+                <InternalButton onPress={() => console.log('open camera')}>
+                  <IconIonicons
+                    name="md-mic"
+                    size={25}
+                    color={theme.colors.red}
+                  />
+                </InternalButton>
+                <TimeText>{getFormatedDuration(recordingDuration)}</TimeText>
+              </>
+            ) : (
+              <>
+                <MessageInput
+                  // editable={!isRecordingAudio}
+                  onChangeText={(text) => onStartTyping(text)}
+                  value={message}
+                  autoCapitalize="none"
+                  onSubmitEditing={() => sendMessage()}
+                  placeholder="Type your message"
+                />
+                <InternalButton onPress={() => console.log('open camera')}>
+                  <IconIonicons
+                    name="md-camera"
+                    size={25}
+                    color={theme.colors.primary}
+                  />
+                </InternalButton>
+              </>
+            )}
+          </InputBox>
         </InputContainer>
-        {actionButton()}
+        <ActionButton
+          message={message}
+          isRecordingAudio={isRecordingAudio}
+          onSendMessage={sendMessage}
+          onToogleAudioRecord={toogleAudioRecord}
+        />
       </ContainerComponents>
     </Container>
   );
