@@ -86,12 +86,11 @@ function Chat() {
             showsHorizontalScrollIndicator={false}
             data={messages}
             inverted
-            keyExtractor={(item) => Math.random().toString()}
             onEndReachedThreshold={0.1}
             //onEndReached={this.handleLoadMore}
             renderItem={({item}) => {
               console.log(item);
-              if (item.type == 'userActivity') {
+              if (item.type === 'userActivity') {
                 return (
                   <UserActivityMessage
                     key={Math.random().toString()}
@@ -99,7 +98,7 @@ function Chat() {
                   />
                 );
               }
-              return <Message key={Math.random().toString()} data={item} />;
+              return <Message key={item.id} data={item} />;
             }}
             contentContainerStyle={{paddingBottom: 3}}
           />
