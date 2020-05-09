@@ -18,7 +18,7 @@ const Message = ({data}) => {
       <ContainerMessage>
         {data.type === 'text' && <TextMessage>{data.message}</TextMessage>}
         {data.type === 'audio-local' && (
-          <AudioMessageLocal path={data.path} duration={data.duration} />
+          <AudioMessageLocal file={data.file} duration={data.duration} />
         )}
         {data.type === 'audio' && <AudioMessage>{data.message}</AudioMessage>}
         {data.type === 'image' && (

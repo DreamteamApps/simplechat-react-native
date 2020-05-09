@@ -21,7 +21,6 @@ import {debounce} from 'throttle-debounce';
 import {useAuth} from '~/Contexts/AuthContext';
 import AudioRecord from '~/Service/audioRecorder';
 import {useTheme} from 'styled-components';
-import {duration} from 'moment';
 
 const BoxInputMessage = () => {
   const theme = useTheme();
@@ -53,18 +52,19 @@ const BoxInputMessage = () => {
   const toogleAudioRecord = useCallback(async () => {
     if (isRecordingAudio)
       AudioRecord.stop((duration, path) => {
-        setRecordingDuration(duration);
+        console.log("toogleAudioRecord path",path)
         setMessages((messages) => [
-          {data: 1234, type: 'audio-local', file: path},
+          {data: 1234, type: 'audio-local', file: path, duration},
           ...messages,
         ]);
+        setRecordingDuration(0);
       });
     else await AudioRecord.start((duration) => setRecordingDuration(duration));
     setIsRecordingAudio(!isRecordingAudio);
   }, [isRecordingAudio]);
 
   const cancelAudioRecord = useCallback(async () => {
-    AudioRecord.cancel((duration) => setRecordingDuration(duration));
+    AudioRecord.cancel(() => setRecordingDuration(0));
     setIsRecordingAudio(false);
   }, []);
 

@@ -14,6 +14,18 @@ let path = null;
 let durationInterval = null;
 let duration = 0;
 let initialized = false;
+let player = new Player();
+
+function play(path, onStart) {
+  if (player) player.destroy();
+  console.log('play path', path);
+  player = new Player(path);
+  player.prepare((err) => {
+    player.play(() => {
+      onStart();
+    });
+  });
+}
 
 async function init() {
   clearInterval(durationInterval);
@@ -50,16 +62,11 @@ async function start(durationCallback) {
 
 async function stop(callback) {
   recorder.stop(async () => {
-    // teste de som
-    let plauer = new Player(path);
-    plauer.prepare(() => {
-      plauer.play();
-    });
-    //
-    clearInterval(durationInterval);
-    duration = 0;
+    console.log("callbackdurationstop", duration)
     await callback(duration, path);
     await uploadSound(path, duration);
+    clearInterval(durationInterval);
+    duration = 0;
   });
 }
 
@@ -67,7 +74,7 @@ async function cancel(callback) {
   recorder.stop(() => {
     clearInterval(durationInterval);
     duration = 0;
-    callback(duration);
+    callback();
   });
 }
 
@@ -75,4 +82,5 @@ export default {
   stop,
   start,
   cancel,
+  play,
 };
