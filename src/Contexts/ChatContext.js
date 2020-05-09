@@ -2,7 +2,7 @@ import React, {createContext, useState, useContext, useRef} from 'react';
 export const ChatContext = createContext();
 
 const ChatProvider = ({children}) => {
-  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState('');
   const [typing, setTyping] = useState({});
   var typingTimer;
 
@@ -16,7 +16,7 @@ const ChatProvider = ({children}) => {
 
   return (
     <ChatContext.Provider
-      value={{message, setMessage, typing, setTyping, startTyping}}>
+      value={{messages, setMessages, typing, setTyping, startTyping}}>
       {children}
     </ChatContext.Provider>
   );

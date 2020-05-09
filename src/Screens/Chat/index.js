@@ -1,12 +1,10 @@
 import React, {useEffect, useState, useCallback, memo} from 'react';
 
 import {Container} from './styles';
-import {Text, Button, FlatList, View, Dimensions, Platform} from 'react-native';
+import {FlatList, View, Platform} from 'react-native';
 import {useAuth} from '~/Contexts/AuthContext';
 import {useApp} from '~/Contexts/AppContext';
 import Message from '~/Components/Message';
-import Snackbar from 'react-native-snackbar';
-import InputText from '~/Components/InputText';
 import BoxInputMessage from '~/Components/BoxInputMessage';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import UserActivityMessage from '~/Components/UserActivityMessage';
@@ -16,8 +14,7 @@ function Chat() {
   const {user, isMe} = useAuth();
   const {emit, hubConnect} = useApp();
   const {startTyping} = useChat();
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
+  const {messages, setMessages} = useChat();
 
   const setUserActivity = (userData, action) => {
     setMessages((messages) => [
@@ -42,7 +39,6 @@ function Chat() {
         setMessages(data.lastMessages);
       } else {
         console.log('entrei agora sem mensagens', Platform.OS);
-
         setUserActivity(data.user, 'joined');
       }
     });
@@ -94,6 +90,7 @@ function Chat() {
             onEndReachedThreshold={0.1}
             //onEndReached={this.handleLoadMore}
             renderItem={({item}) => {
+              console.log(item);
               if (item.type == 'userActivity') {
                 return (
                   <UserActivityMessage

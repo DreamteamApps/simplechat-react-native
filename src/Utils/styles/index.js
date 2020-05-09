@@ -24,6 +24,7 @@ const colors = {
   green: '#85C159',
   red: '#EB6464',
   gray: '#585858',
+  audioButton:'#25B7D3',
   themeType: 'light-content',
 };
 const fonts = {

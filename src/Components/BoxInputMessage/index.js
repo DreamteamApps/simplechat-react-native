@@ -25,11 +25,13 @@ import {duration} from 'moment';
 
 const BoxInputMessage = () => {
   const theme = useTheme();
-  const {message, setMessage, typing} = useChat();
+  const {setMessages, typing} = useChat();
+  const [message, setMessage] = useState('');
   const {isMe} = useAuth();
   const [isRecordingAudio, setIsRecordingAudio] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const {emit} = useApp();
+
   const sendMessage = () => {
     emit('send-message', {
       message: message,
@@ -50,7 +52,13 @@ const BoxInputMessage = () => {
 
   const toogleAudioRecord = useCallback(async () => {
     if (isRecordingAudio)
-      AudioRecord.stop((duration) => setRecordingDuration(duration));
+      AudioRecord.stop((duration, path) => {
+        setRecordingDuration(duration);
+        setMessages((messages) => [
+          {data: 1234, type: 'audio-local', file: path},
+          ...messages,
+        ]);
+      });
     else await AudioRecord.start((duration) => setRecordingDuration(duration));
     setIsRecordingAudio(!isRecordingAudio);
   }, [isRecordingAudio]);

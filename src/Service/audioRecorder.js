@@ -58,7 +58,7 @@ async function stop(callback) {
     //
     clearInterval(durationInterval);
     duration = 0;
-    callback(duration);
+    await callback(duration, path);
     await uploadSound(path, duration);
   });
 }
