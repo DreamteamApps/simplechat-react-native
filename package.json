@@ -26,7 +26,7 @@
     "react-native-gesture-handler": "^1.6.1",
     "react-native-image-progress": "^1.1.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
-    "react-native-lightbox": "^0.8.1",
+    "react-native-lightbox": "https://github.com/DreamteamApps/react-native-lightbox",
     "react-native-permissions": "^2.1.4",
     "react-native-reanimated": "^1.8.0",
     "react-native-safe-area-context": "^0.7.3",
