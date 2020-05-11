@@ -5,8 +5,6 @@ export const AudioPlayer = () => {
   Sound.setCategory('Playback');
 
   const play = (audioFile, track = 'background') => {
-    console.log('audioLog', audioFile);
-
     const player = new Sound(audioFile, Sound.MAIN_BUNDLE, (error) => {
       player.play();
       player.setVolume(0.5);

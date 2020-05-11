@@ -6,6 +6,7 @@ import AudioMessageLocal from './Types/AudioMessageLocal';
 import moment from 'moment';
 import {Container, SenderInfo, DateInfo, ContainerMessage} from './styles';
 import {useAuth} from '~/Contexts/AuthContext';
+
 import ImageMessage from './Types/ImageMessage';
 const Message = ({data}) => {
   const {user} = useAuth();
@@ -18,9 +19,21 @@ const Message = ({data}) => {
       <ContainerMessage>
         {data.type === 'text' && <TextMessage>{data.message}</TextMessage>}
         {data.type === 'audio-local' && (
-          <AudioMessageLocal file={data.file} duration={data.duration} />
+          <AudioMessageLocal
+         
+            file={data.file}
+            duration={data.duration}
+            loading={data.loading}
+          />
         )}
-        {data.type === 'audio' && <AudioMessage>{data.message}</AudioMessage>}
+        {data.type === 'audio' && (
+          <AudioMessageLocal
+          data={data}
+            file={data.file.url}
+            duration={data.file.duration}
+            loading={false}
+          />
+        )}
         {data.type === 'image' && (
           <ImageMessage
             imageUrl={data?.file?.url}

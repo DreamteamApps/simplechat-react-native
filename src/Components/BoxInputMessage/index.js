@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {View, Button} from 'react-native';
+import {uploadSound} from '~/Service/fileApi';
 import {
   Container,
   ContainerComponents,
@@ -19,7 +20,7 @@ import {useApp} from '~/Contexts/AppContext';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 import {debounce} from 'throttle-debounce';
 import {useAuth} from '~/Contexts/AuthContext';
-import AudioRecord from '~/Service/audioRecorder';
+import VoiceRecorder from '~/Service/voiceRecorder';
 import {useTheme} from 'styled-components';
 
 const BoxInputMessage = () => {
@@ -39,6 +40,13 @@ const BoxInputMessage = () => {
     setMessage('');
   };
 
+  const sendAudio = (id) => {
+    emit('send-message', {
+      fileId: id,
+      type: 'audio',
+    });
+  };
+
   const delayedTyping = useRef(
     debounce(500, () => {
       emit('writing-message');
@@ -51,29 +59,35 @@ const BoxInputMessage = () => {
 
   const toogleAudioRecord = useCallback(async () => {
     if (isRecordingAudio)
-      AudioRecord.stop((duration, path) => {
-        console.log("toogleAudioRecord path",path)
+      VoiceRecorder.stop(async (duration, path) => {
+        console.log('toogleAudioRecord path', path);
+        let message = {
+          id: path,
+          data: 1234,
+          type: 'audio-local',
+          file: path,
+          duration,
+          loading: true,
+        };
+        setMessages((messages) => [message, ...messages]);
+        const response = await uploadSound(path, duration);
+        sendAudio(response.id);
+        message.loading = false;
         setMessages((messages) => [
-          {data: 1234, type: 'audio-local', file: path, duration},
-          ...messages,
+          message,
+          ...messages.filter((i) => i.id !== message.id),
         ]);
+
         setRecordingDuration(0);
       });
-    else await AudioRecord.start((duration) => setRecordingDuration(duration));
+    else
+      await VoiceRecorder.start((duration) => setRecordingDuration(duration));
     setIsRecordingAudio(!isRecordingAudio);
   }, [isRecordingAudio]);
 
   const cancelAudioRecord = useCallback(async () => {
-    AudioRecord.cancel(() => setRecordingDuration(0));
+    VoiceRecorder.cancel(() => setRecordingDuration(0));
     setIsRecordingAudio(false);
-  }, []);
-
-  const getFormatedDuration = useCallback((recordingDuration) => {
-    const minutes = Math.floor(recordingDuration / 60);
-    const seconds = recordingDuration - minutes * 60;
-    return `${minutes
-      .toString()
-      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }, []);
 
   return (
@@ -93,7 +107,9 @@ const BoxInputMessage = () => {
                     color={theme.colors.red}
                   />
                 </InternalButton>
-                <TimeText>{getFormatedDuration(recordingDuration)}</TimeText>
+                <TimeText>
+                  {VoiceRecorder.getFormatedDuration(recordingDuration)}
+                </TimeText>
                 <CancelContainer onPress={cancelAudioRecord}>
                   <CancelText>Cancelar</CancelText>
                 </CancelContainer>

@@ -40,7 +40,6 @@ export default function Home({navigation}) {
         //let pushToken = await getPushToken();
         const dataReturn = await getData(username);
         await saveUser(dataReturn.data);
-        console.log('user_return', dataReturn.data);
         setUser(dataReturn.data);
         navigation.navigate('Chat');
       } catch (error) {

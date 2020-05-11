@@ -28,4 +28,9 @@ export const TrackBall = styled(Animated.View)`
   border-width: ${(props) => props.theme.hpx(5)};
 `;
 
-export const Text = styled.Text``;
+export const TimeelapsedContainer = styled.View`
+  width: ${(props) => props.theme.hpx(40)};
+  height: ${(props) => props.theme.hpx(10)};
+  margin-top: ${(props) => props.theme.hpx(25)};
+`;
+

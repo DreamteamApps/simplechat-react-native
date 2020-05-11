@@ -28,17 +28,12 @@ function Chat() {
   };
 
   useEffect(() => {
-    console.log('myUser', user);
     emit('join-room', {userId: user.id});
 
     hubConnect.on('user-joined', (data) => {
-      //console.log('user-joined', JSON.stringify(data, null, 2));
-      console.log('user-joined', data);
       if (isMe(data.user.id)) {
-        console.log('entrei agora com mensagens', Platform.OS);
         setMessages(data.lastMessages);
       } else {
-        console.log('entrei agora sem mensagens', Platform.OS);
         setUserActivity(data.user, 'joined');
       }
     });
@@ -48,12 +43,10 @@ function Chat() {
     });
 
     hubConnect.on('user-send-message', (message) => {
-      console.log('mensagem', message);
       setMessages((messages) => [message, ...messages]);
     });
 
     hubConnect.on('user-writing-message', (data) => {
-      console.log('user-writing-message', data);
       startTyping(data.user);
     });
 
@@ -89,7 +82,6 @@ function Chat() {
             onEndReachedThreshold={0.1}
             //onEndReached={this.handleLoadMore}
             renderItem={({item}) => {
-              console.log(item);
               if (item.type === 'userActivity') {
                 return (
                   <UserActivityMessage
